@@ -36,3 +36,8 @@ jobs:
           command: |
             sfdx force:org:delete -u circle_build_$CIRCLE_BUILD_NUM -p
           when: always
+workflows:
+  version: 2
+  apex_tests:
+    jobs:
+      - run_apex_tests
