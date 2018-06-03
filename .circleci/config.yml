@@ -13,29 +13,29 @@ jobs:
              echo $HUB_SERVER_KEY_HEX | xxd -r -ps >> keys/hub.key
              openssl rsa -in keys/hub.key -check -noout
              sfdx force:auth:jwt:grant --clientid $HUB_CONSUMER_KEY --jwtkeyfile keys/hub.key --username $HUB_SFDC_USER --setdefaultdevhubusername -a hub
-      - run:
-          name: create scratch org
-          command:
-            sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$CIRCLE_BUILD_NUM
-      - run:
-          name: push source to scratch org
-          command:
-            sfdx force:source:push -u circle_build_$CIRCLE_BUILD_NUM
-      - run:
-          name: run apex tests
-          command: |
-            mkdir -p tests/junit
-            sfdx force:apex:test:run -d tests/junit -r junit
-      - store_test_results:
-          path: tests/junit
-      - store_artifacts:
-          path: tests/junit
-      - run:
-          name: delete scratch org
-          when: always
-          command: |
-            sfdx force:org:delete -u circle_build_$CIRCLE_BUILD_NUM -p
-          when: always
+#      - run:
+#          name: create scratch org
+#          command:
+#            sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$circle_build_num
+#      - run:
+#          name: push source to scratch org
+#          command:
+#            sfdx force:source:push -u circle_build_$circle_build_num
+#      - run:
+#          name: run apex tests
+#          command: |
+#            mkdir -p tests/junit
+#            sfdx force:apex:test:run -d tests/junit -r junit
+#      - store_test_results:
+#          path: tests/junit
+#      - store_artifacts:
+#          path: tests/junit
+#      - run:
+#          name: delete scratch org
+#          when: always
+#          command: |
+#            sfdx force:org:delete -u circle_build_$circle_build_num -p
+#          when: always
 workflows:
   version: 2
   apex_tests:
