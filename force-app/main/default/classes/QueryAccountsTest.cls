@@ -19,6 +19,6 @@ private class QueryAccountsTest {
         List<Account> accounts = QueryAccounts.queryAllAccounts();
 
         // Then
-        System.assertEquals(true, accounts.size() == 0);
+        System.assertEquals(true, accounts.size() > 0);
     }
 }
