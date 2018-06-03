@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: login into devhub
+          name: login into devhub now
           command: |
              mkdir keys
              echo $HUB_SERVER_KEY_HEX | xxd -r -ps >> keys/hub.key
