@@ -6,7 +6,7 @@ jobs:
       - image: appsolutely/sfdx_circleci_container:latest
     steps:
       - checkout
-      - sfrun:
+      - run:
           name: login into devhub
           command: |
              mkdir keys
