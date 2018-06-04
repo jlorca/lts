@@ -17,10 +17,10 @@ jobs:
           name: create scratch org
           command:
             sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$circle_build_num
-#      - run:
-#          name: install lightning tests
-#          command:
-#            sfdx force:lightning:test:install -u circle_build_$circle_build_num
+      - run:
+          name: install lightning tests
+          command:
+            sfdx force:lightning:test:install -u circle_build_$circle_build_num
       - run:
           name: push source to scratch org
           command:
