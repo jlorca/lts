@@ -19,8 +19,9 @@ jobs:
             sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$circle_build_num
       - run:
           name: run lightning tests
-          command:
+          command: |
             sfdx force:lightning:test:install -u circle_build_$circle_build_num
+            sfdx force:lightning:test:run -a UiTestApp.app -u circle_build_$circle_build_num
       - run:
           name: push source to scratch org
           command:
