@@ -3,7 +3,7 @@ version: 2
 jobs:
   run_apex_tests:
     docker:
-      - image: appsolutely/sfdx_circleci_container:latest
+      - image: jeslorlu/sfdxci:v1
     steps:
       - checkout
       - run:
@@ -17,6 +17,10 @@ jobs:
           name: create scratch org
           command:
             sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$circle_build_num
+      - run:
+            name: install lightning tests
+            command:
+              sfdx force:lightning:test:install -u circle_build_$circle_build_num
       - run:
           name: push source to scratch org
           command:
@@ -37,48 +41,48 @@ jobs:
             sfdx force:org:delete -u circle_build_$circle_build_num -p
           when: always
 
-  run_ui_tests:
-      docker:
-        - image: circleci/python:3.4-browsers
-      steps:
-        - checkout
-        - run:
-            name: login into devhub
-            command: |
-               mkdir keys
-               echo $HUB_SERVER_KEY_HEX | xxd -r -ps >> keys/hub.key
-               openssl rsa -in keys/hub.key -check -noout
-               sfdx force:auth:jwt:grant --clientid $HUB_CONSUMER_KEY --jwtkeyfile keys/hub.key --username $HUB_SFDC_USER --setdefaultdevhubusername -a hub
-        - run:
-            name: create scratch org
-            command:
-              sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$circle_build_num
-        - run:
-            name: install lightning tests
-            command:
-              sfdx force:lightning:test:install -u circle_build_$circle_build_num
-        - run:
-            name: push source to scratch org
-            command:
-              sfdx force:source:push -u circle_build_$circle_build_num
-        - run:
-            name: run lightning tests
-            command: |
-              mkdir -p tests/uitests
-              sfdx force:lightning:test:run -d tests/uitests -r human -a UiTestApp.app -u circle_build_$circle_build_num
-        - store_test_results:
-            path: tests/uitests
-        - store_artifacts:
-            path: tests/uitests
-        - run:
-            name: delete scratch org
-            when: always
-            command: |
-              sfdx force:org:delete -u circle_build_$circle_build_num -p
-            when: always
+#  run_ui_tests:
+#      docker:
+#        - image:
+#      steps:
+#        - checkout
+#        - run:
+#            name: login into devhub
+#            command: |
+#               mkdir keys
+#               echo $HUB_SERVER_KEY_HEX | xxd -r -ps >> keys/hub.key
+#               openssl rsa -in keys/hub.key -check -noout
+#               sfdx force:auth:jwt:grant --clientid $HUB_CONSUMER_KEY --jwtkeyfile keys/hub.key --username $HUB_SFDC_USER --setdefaultdevhubusername -a hub
+#        - run:
+#            name: create scratch org
+#            command:
+#              sfdx force:org:create -s -f config/project-scratch-def.json -a circle_build_$circle_build_num
+#        - run:
+#            name: install lightning tests
+#            command:
+#              sfdx force:lightning:test:install -u circle_build_$circle_build_num
+#        - run:
+#            name: push source to scratch org
+#            command:
+#              sfdx force:source:push -u circle_build_$circle_build_num
+#        - run:
+#            name: run lightning tests
+#            command: |
+#              mkdir -p tests/uitests
+#              sfdx force:lightning:test:run -d tests/uitests -r human -a UiTestApp.app -u circle_build_$circle_build_num
+#        - store_test_results:
+#            path: tests/uitests
+#        - store_artifacts:
+#            path: tests/uitests
+#        - run:
+#            name: delete scratch org
+#            when: always
+#            command: |
+#              sfdx force:org:delete -u circle_build_$circle_build_num -p
+#            when: always
 workflows:
   version: 2
   apex_tests:
     jobs:
       - run_apex_tests
-      - run_ui_tests
+#      - run_ui_tests
