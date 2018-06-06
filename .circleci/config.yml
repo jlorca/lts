@@ -3,7 +3,7 @@ version: 2
 jobs:
   run_apex_tests:
     docker:
-      - image: jeslorlu/sfdxci:v1
+      - image: jeslorlu/sfdxci:v2
     steps:
       - checkout
       - run:
