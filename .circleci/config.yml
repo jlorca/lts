@@ -36,7 +36,7 @@ jobs:
             mkdir -p uitestconfig
             echo "{"drivers":{"chrome":{"version":2.33,"arch":"x64","baseURL":"https://chromedriver.storage.googleapis.com"}},"requestOpts":{"timeout":100000},"webdriverio":{"desiredCapabilities":{"browserName":"chrome","chromeOptions":{"args":["--headless","--disable-gpu","--no-sandbox"]}}}}" >> uitestconfig/lts-config.json
             mkdir -p tests/uitests
-            sfdx force:lightning:test:run -d tests/uitests -r human -a UiTestApp.app -u circle_build_$circle_build_num -f uitestconfig/lts-config.json
+            sfdx force:lightning:test:run -d tests/uitests -r human -a UiTestApp.app -f uitestconfig/lts-config.json -u circle_build_$circle_build_num
       - store_test_results:
           path: tests/junit
           path: tests/uitests
